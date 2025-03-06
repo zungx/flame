@@ -56,6 +56,7 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   @mustCallSuper
   void onMount() {
     super.onMount();
+    // TODO: we should use hover callbacks instead of pointer move callbacks
     PointerMoveCallbacks.onMountHandler(this);
   }
 }

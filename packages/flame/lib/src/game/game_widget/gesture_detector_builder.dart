@@ -1,6 +1,6 @@
 import 'package:flame/events.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart' as flutter;
 import 'package:flutter/widgets.dart';
 
 class GestureDetectorBuilder {
@@ -10,7 +10,7 @@ class GestureDetectorBuilder {
   final Map<Type, int> _counters = {};
   final void Function()? _onChange;
 
-  void add<T extends GestureRecognizer>(
+  void add<T extends flutter.GestureRecognizer>(
     T Function() constructor,
     void Function(T) initializer,
   ) {
@@ -23,7 +23,7 @@ class GestureDetectorBuilder {
     _counters[T] = (count ?? 0) + 1;
   }
 
-  void remove<T extends GestureRecognizer>() {
+  void remove<T extends flutter.GestureRecognizer>() {
     final count = _counters[T]!;
     if (count == 1) {
       _counters.remove(T);
@@ -50,8 +50,8 @@ class GestureDetectorBuilder {
         game is SecondaryTapDetector ||
         game is TertiaryTapDetector) {
       add(
-        TapGestureRecognizer.new,
-        (TapGestureRecognizer instance) {
+        flutter.TapGestureRecognizer.new,
+        (flutter.TapGestureRecognizer instance) {
           if (game is TapDetector) {
             instance.onTap = game.onTap;
             instance.onTapCancel = game.onTapCancel;
@@ -73,8 +73,8 @@ class GestureDetectorBuilder {
     }
     if (game is DoubleTapDetector) {
       add(
-        DoubleTapGestureRecognizer.new,
-        (DoubleTapGestureRecognizer instance) {
+        flutter.DoubleTapGestureRecognizer.new,
+        (flutter.DoubleTapGestureRecognizer instance) {
           instance.onDoubleTap = game.onDoubleTap;
           instance.onDoubleTapDown = game.handleDoubleTapDown;
           instance.onDoubleTapCancel = game.onDoubleTapCancel;
@@ -83,8 +83,8 @@ class GestureDetectorBuilder {
     }
     if (game is LongPressDetector) {
       add(
-        LongPressGestureRecognizer.new,
-        (LongPressGestureRecognizer instance) {
+        flutter.LongPressGestureRecognizer.new,
+        (flutter.LongPressGestureRecognizer instance) {
           instance.onLongPress = game.onLongPress;
           instance.onLongPressStart = game.handleLongPressStart;
           instance.onLongPressMoveUpdate = game.handleLongPressMoveUpdate;
@@ -96,8 +96,8 @@ class GestureDetectorBuilder {
     }
     if (game is VerticalDragDetector) {
       add(
-        VerticalDragGestureRecognizer.new,
-        (VerticalDragGestureRecognizer instance) {
+        flutter.VerticalDragGestureRecognizer.new,
+        (flutter.VerticalDragGestureRecognizer instance) {
           instance.onDown = game.handleVerticalDragDown;
           instance.onStart = game.handleVerticalDragStart;
           instance.onUpdate = game.handleVerticalDragUpdate;
@@ -108,8 +108,8 @@ class GestureDetectorBuilder {
     }
     if (game is HorizontalDragDetector) {
       add(
-        HorizontalDragGestureRecognizer.new,
-        (HorizontalDragGestureRecognizer instance) {
+        flutter.HorizontalDragGestureRecognizer.new,
+        (flutter.HorizontalDragGestureRecognizer instance) {
           instance.onDown = game.handleHorizontalDragDown;
           instance.onStart = game.handleHorizontalDragStart;
           instance.onUpdate = game.handleHorizontalDragUpdate;
@@ -120,8 +120,8 @@ class GestureDetectorBuilder {
     }
     if (game is ForcePressDetector) {
       add(
-        ForcePressGestureRecognizer.new,
-        (ForcePressGestureRecognizer instance) {
+        flutter.ForcePressGestureRecognizer.new,
+        (flutter.ForcePressGestureRecognizer instance) {
           instance.onStart = game.handleForcePressStart;
           instance.onPeak = game.handleForcePressPeak;
           instance.onUpdate = game.handleForcePressUpdate;
@@ -131,8 +131,8 @@ class GestureDetectorBuilder {
     }
     if (game is PanDetector) {
       add(
-        PanGestureRecognizer.new,
-        (PanGestureRecognizer instance) {
+        flutter.PanGestureRecognizer.new,
+        (flutter.PanGestureRecognizer instance) {
           instance.onDown = game.handlePanDown;
           instance.onStart = game.handlePanStart;
           instance.onUpdate = game.handlePanUpdate;
@@ -143,8 +143,8 @@ class GestureDetectorBuilder {
     }
     if (game is ScaleDetector) {
       add(
-        ScaleGestureRecognizer.new,
-        (ScaleGestureRecognizer instance) {
+        flutter.ScaleGestureRecognizer.new,
+        (flutter.ScaleGestureRecognizer instance) {
           instance.onStart = game.handleScaleStart;
           instance.onUpdate = game.handleScaleUpdate;
           instance.onEnd = game.handleScaleEnd;
@@ -153,8 +153,8 @@ class GestureDetectorBuilder {
     }
     if (game is MultiTapListener) {
       add(
-        MultiTapGestureRecognizer.new,
-        (MultiTapGestureRecognizer instance) {
+        flutter.MultiTapGestureRecognizer.new,
+        (flutter.MultiTapGestureRecognizer instance) {
           final g = game as MultiTapListener;
           instance.longTapDelay = Duration(
             milliseconds: (g.longTapDelay * 1000).toInt(),
@@ -180,15 +180,19 @@ Widget applyMouseDetectors(Game game, Widget child) {
   final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
   final mouseDetector = game.mouseDetector;
   return Listener(
+    onPointerMove: (flutter.PointerMoveEvent e) {
+      mouseMoveFn?.call(PointerMoveInfo.fromDetails(game, e));
+      mouseDetector?.call(e);
+    },
     child: MouseRegion(
       child: child,
-      onHover: (PointerHoverEvent e) {
-        mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e));
-        mouseDetector?.call(e);
+      onHover: (flutter.PointerHoverEvent e) {
+        // mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e));
+        // mouseDetector?.call(e);
       },
     ),
     onPointerSignal: (event) =>
-        game is ScrollDetector && event is PointerScrollEvent
+        game is ScrollDetector && event is flutter.PointerScrollEvent
             ? game.onScroll(PointerScrollInfo.fromDetails(game, event))
             : null,
   );

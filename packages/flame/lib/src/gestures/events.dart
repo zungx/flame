@@ -124,6 +124,14 @@ class PointerHoverInfo extends PositionInfo<PointerHoverEvent>
   ) : super(game, raw.position, raw);
 }
 
+class PointerMoveInfo extends PositionInfo<PointerMoveEvent>
+    with _HandledField {
+  PointerMoveInfo.fromDetails(
+    Game game,
+    PointerMoveEvent raw,
+  ) : super(game, raw.position, raw);
+}
+
 class DragDownInfo extends PositionInfo<DragDownDetails> {
   DragDownInfo.fromDetails(
     Game game,

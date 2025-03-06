@@ -191,7 +191,7 @@ mixin ScaleDetector on Game {
 }
 
 mixin MouseMovementDetector on Game {
-  void onMouseMove(PointerHoverInfo info) {}
+  void onMouseMove(PointerMoveInfo info) {}
 }
 
 mixin ScrollDetector on Game {

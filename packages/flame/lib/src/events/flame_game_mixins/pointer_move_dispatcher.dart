@@ -43,8 +43,8 @@ class PointerMoveDispatcher extends Component {
     _records.removeAll(toRemove);
   }
 
-  void _handlePointerMove(flutter.PointerHoverEvent event) {
-    onMouseMove(PointerMoveEvent.fromPointerHoverEvent(game, event));
+  void _handlePointerMove(flutter.PointerMoveEvent event) {
+    onMouseMove(PointerMoveEvent.fromPointerMoveEvent(game, event));
   }
 
   @override

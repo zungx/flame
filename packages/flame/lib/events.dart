@@ -52,6 +52,7 @@ export 'src/gestures/events.dart'
         LongPressMoveUpdateInfo,
         LongPressStartInfo,
         PointerHoverInfo,
+        PointerMoveInfo,
         PointerScrollInfo,
         PositionInfo,
         ScaleEndInfo,

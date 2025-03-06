@@ -7,7 +7,7 @@ class PointerMoveEvent extends PositionEvent {
   PointerMoveEvent(
     this.pointerId,
     super.game,
-    flutter.PointerHoverEvent rawEvent,
+    this.rawEvent,
   )   : timestamp = rawEvent.timeStamp,
         delta = rawEvent.delta.toVector2(),
         super(
@@ -17,6 +17,7 @@ class PointerMoveEvent extends PositionEvent {
   final int pointerId;
   final Duration timestamp;
   final Vector2 delta;
+  final flutter.PointerMoveEvent rawEvent;
 
   static final _nanPoint = Vector2.all(double.nan);
 
@@ -31,9 +32,9 @@ class PointerMoveEvent extends PositionEvent {
       'delta: $delta, '
       'pointerId: $pointerId, timestamp: $timestamp)';
 
-  factory PointerMoveEvent.fromPointerHoverEvent(
+  factory PointerMoveEvent.fromPointerMoveEvent(
     Game game,
-    flutter.PointerHoverEvent event,
+    flutter.PointerMoveEvent event,
   ) {
     return PointerMoveEvent(
       event.pointer,

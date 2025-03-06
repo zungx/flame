@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
+import 'package:flame/events.dart' as eventFlame;
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
@@ -17,23 +17,29 @@ void main() {
   );
 }
 
-class MyWorld extends World with TapCallbacks {
+class MyWorld extends World with eventFlame.TapCallbacks, eventFlame.PointerMoveCallbacks {
   @override
   Future<void> onLoad() async {
     add(Square(Vector2.zero()));
   }
 
   @override
-  void onTapDown(TapDownEvent event) {
+  void onTapDown(eventFlame.TapDownEvent event) {
     super.onTapDown(event);
     if (!event.handled) {
       final touchPoint = event.localPosition;
       add(Square(touchPoint));
     }
   }
+
+  @override
+  void onPointerMove(eventFlame.PointerMoveEvent event) {
+    super.onPointerMove(event);
+    print('onPointerMove: ${event.rawEvent.pressure}');
+  }
 }
 
-class Square extends RectangleComponent with TapCallbacks {
+class Square extends RectangleComponent with eventFlame.TapCallbacks {
   static const speed = 3;
   static const squareSize = 128.0;
   static const indicatorSize = 6.0;
@@ -75,7 +81,7 @@ class Square extends RectangleComponent with TapCallbacks {
   }
 
   @override
-  void onTapDown(TapDownEvent event) {
+  void onTapDown(eventFlame.TapDownEvent event) {
     removeFromParent();
     event.handled = true;
   }

@@ -34,6 +34,7 @@ export 'src/gestures/detectors.dart'
         HorizontalDragDetector,
         LongPressDetector,
         MouseMovementDetector,
+        PointerListenerDetector,
         PanDetector,
         ScaleDetector,
         ScrollDetector,

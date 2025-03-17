@@ -172,17 +172,33 @@ class GestureDetectorBuilder {
 
 bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
+      game is PointerListenerDetector ||
       game is ScrollDetector ||
       game.mouseDetector != null;
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
+  final pointerDownFn = game is PointerListenerDetector ? game.onPointerDown : null;
+  final pointerMoveFn = game is PointerListenerDetector ? game.onPointerMove : null;
+  final pointerUpFn = game is PointerListenerDetector ? game.onPointerUp : null;
+  final pointerCancelFn = game is PointerListenerDetector ? game.onPointerCancel : null;
+
   final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
   final mouseDetector = game.mouseDetector;
   return Listener(
     onPointerMove: (flutter.PointerMoveEvent e) {
       mouseMoveFn?.call(PointerMoveInfo.fromDetails(game, e));
       mouseDetector?.call(e);
+      pointerMoveFn?.call(e);
+    },
+    onPointerDown: (flutter.PointerDownEvent e) {
+      pointerDownFn?.call(e);
+    },
+    onPointerUp: (flutter.PointerUpEvent e) {
+      pointerUpFn?.call(e);
+    },
+    onPointerCancel: (flutter.PointerCancelEvent e) {
+      pointerCancelFn?.call(e);
     },
     child: MouseRegion(
       child: child,

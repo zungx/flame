@@ -197,3 +197,10 @@ mixin MouseMovementDetector on Game {
 mixin ScrollDetector on Game {
   void onScroll(PointerScrollInfo info) {}
 }
+
+mixin PointerListenerDetector on Game {
+  void onPointerDown(PointerDownEvent event) {}
+  void onPointerMove(PointerMoveEvent event) {}
+  void onPointerUp(PointerUpEvent event) {}
+  void onPointerCancel(PointerCancelEvent event) {}
+}
